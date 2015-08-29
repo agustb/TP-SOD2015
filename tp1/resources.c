@@ -6,28 +6,26 @@
 int chequea_parametros_cliente (int argc, char* argv[], char **ip, char **modo, int *puerto, int *lu, int *nota)
 {
 
-	if (argc < 2) // si no llegan parámetros produce error y muestra el siguiente mensaje.
+	if (argc < 4) // si no llegan parámetros produce error y muestra el siguiente mensaje.
 	{
-		printf ("Ha ocurrido un Error. Parametros: %s [-p <port>] [-a|-p <Modo Alumno|Profesor>] [lu <Libreta Universitaria>] [nota <Calificacion>]\n", argv[0]);
+		printf ("Error en parametros de entrada para %s\n-> Cadena valida: [-p <port>] [-A|-P <Modo Alumno|Profesor>] [lu <Libreta Universitaria>] [nota (solo modo Profesor) <Calificacion>]\n", argv[0]);
 		return -1;
 	}
-	*ip= argv[1];
 	
-	*modo = argv[3];
-	//printf ("Opcion elegida: %s\n",*modo);
+	*ip= argv[1];	
 
-/*	if (*modo != "-a" || *modo != "-p")
+	// Controlo que el parámetro de Modo sea -A o -P. Sino muestra error.
+	*modo = argv[3];
+	if (strcmp(*modo, "-A") != 0 && strcmp(*modo, "-P") != 0)
     {
-        printf ("ERROR. Los modos permitidos son: [-a] (si ingresa como ALUMNO) o [-p] (si ingresa como PROFESOR).\n");
+        printf ("Error. Los modos permitidos son: [-A] (si ingresa como ALUMNO) o [-P] (si ingresa como PROFESOR).\n");
+		printf ("Verifique que las letras esten en MAYUSCULAS.\n");
         return -1;
     }
-    else
-    {
-        printf ("Modo Correcto. Opcion elegida: %s",*modo);
-    }  */
 
+	// analizo parametros con getopt
 	int c;
-	while ((c = getopt (argc, argv, "p:l:n:m:")) != -1)
+	while ((c = getopt (argc, argv, "p:l:n::A::P::")) != -1)
 	{
 		switch (c)
 	    {
@@ -35,23 +33,12 @@ int chequea_parametros_cliente (int argc, char* argv[], char **ip, char **modo, 
 	       	{
 			   *puerto = atoi(optarg);
 			   if (*puerto <2000 || *puerto > 30000)
-			   {printf ("Modo Correcto. Opcion elegida: %s",*modo);
+			   {	
 			   		printf ("El puerto debe estar comprendido entre 2000 y 30000\n");
 					return -1;
 			   }
 			   break;
 	       	}
-
-//			case 'm': // modo: Alumno | Profesor
-//	       	{
-//			   *modo = optarg;
-//			   if (*modo != "a" || *modo != "p")
-//			   {
-//			   		printf ("Los modos permitidos son: [-a] (si ingresa como ALUMNO) o [-p] (si ingresa como PROFESOR).\n");
-//					return -1;
-//			   }
-//			   break;
-//	       	}
 
 			case 'l': // libreta universitaria
 	       	{
@@ -67,17 +54,31 @@ int chequea_parametros_cliente (int argc, char* argv[], char **ip, char **modo, 
 			case 'n': // nota.
 	       	{
 			   *nota = atoi(optarg);
-
 			   if (*nota < 0 || *nota > 10)
 			   {
-			   		printf ("El calificacion del alumno no puede ser negativa o mayor a 10.\n");
+					printf ("El calificacion del alumno no puede ser negativa o mayor a 10.\n");
 					return -1;
-			   }
-
+			   }				   
 			   break;
 		   	}
 
-	    }
+			case 'A':
+			{
+				// Capturo el parámetro -A
+				break;
+			}				
+			
+			case 'P':
+			{
+				// Capturo el parámetro -P
+				break;
+			}				
+			
+			case '?':
+			{
+				// Capturo el parámetro -A|-P
+			}				
+		}
 	}
 	return 0;
 }
@@ -103,3 +104,9 @@ int chequea_parametros_servidor(int argc, char* argv[], int *puerto)
 	}
     return 0;
 }
+
+
+
+
+
+

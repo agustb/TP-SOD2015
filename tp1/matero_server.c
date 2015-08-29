@@ -10,24 +10,25 @@
 #include <errno.h>
 //--------------------
 
-
-
 int main(int argc, char* argv[])
 {
 	int puerto = 3000;
 	char Cadena[100];	
 
+	system("clear"); 
+		
+	printf("\n");
 	printf("===================================================\n");
 	printf("== BIENVENIDO A MATERO ============================\n");
 	printf("== Modo: SERVIDOR =================================\n");	
 	printf("===================================================\n");
-	
+	printf("\n");
 
+	// Chequea que los parámetros ingresados sean correctos con los utilizados.
 	if (chequea_parametros_servidor(argc, argv, &puerto)<0)
 	    return -1;
 
-//--- SOCKET SERVIDOR -----------------------------------------------------	
-	
+	// SOCKET SERVIDOR ------------------------------------------------------------------------------		
 	// Crea el socket del servidor.
 	int socket_servidor;
 	socket_servidor = socket (AF_INET, SOCK_STREAM, 0);	
@@ -59,9 +60,9 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-//-------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------
 
-//--- SOCKET RETORNO ------------------------------------------------------	
+	// SOCKET RETORNO --------------------------------------------------------------------------------------	
 
 	//socklen_t largo = sizeof(struct sockaddr_in);
 	
@@ -113,7 +114,6 @@ int main(int argc, char* argv[])
 	}
 	
 	printf ("Soy Servidor, he recibido : %s\n", Cadena);	
-	
 	
 	// ESCRIBE SOCKET CLIENTE ---------------------------------------------------------------------------------
 	strcpy (Cadena, "Adios");
