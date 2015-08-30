@@ -2,6 +2,10 @@
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 
 int chequea_parametros_cliente (int argc, char* argv[], char **ip, char **modo, int *puerto, int *lu, int *nota)
 {
@@ -105,6 +109,110 @@ int chequea_parametros_servidor(int argc, char* argv[], int *puerto)
     return 0;
 }
 
+int LeerSocket (int fd, char *Datos, int Longitud)
+{
+	int Leido = 0;
+	int Aux = 0;
+
+	if ((fd == -1) || (Datos == NULL) || (Longitud < 1))
+		return -1;
+	while (Leido < Longitud)
+	{
+		Aux = read (fd, Datos + Leido, Longitud - Leido);
+		if (Aux > 0)
+		{
+			Leido = Leido + Aux;
+		}
+		else
+		{
+			if (Aux == 0) 
+				return Leido;
+			if (Aux == -1)
+			{
+				switch (errno)
+				{
+					case EINTR:
+					case EAGAIN:
+						usleep (100);
+						break;
+					default:
+						return -1;
+				}
+			}
+		}
+	}
+	return Leido;
+}
+
+int EscribirSocket (int fd, char *Datos, int Longitud)
+{
+	int Escrito = 0;
+	int Aux = 0;
+
+	if ((fd == -1) || (Datos == NULL) || (Longitud < 1))
+		return -1;
+
+	while (Escrito < Longitud)
+	{
+		Aux = write (fd, Datos + Escrito, Longitud - Escrito);
+		if (Aux > 0)
+		{
+			Escrito = Escrito + Aux;
+		}
+		else
+		{
+			if (Aux == 0)
+				return Escrito;
+			else
+				return -1;
+		}
+	}
+	return Escrito;
+}
+
+struct PaqueteMatero {
+    char *modo;
+    int LU;
+    int Nota;
+};
+
+struct PaqueteMatero arrayNotas[20];
+
+void IncializaArrayNotas()
+{
+	int low = 0;
+	int high = (sizeof(arrayNotas) - 1);
+	
+	for (low=0;low<=high;low++)
+	{
+		arrayNotas[low].modo = NULL;
+		arrayNotas[low].LU = 0;
+		arrayNotas[low].Nota = 0;		
+	}	
+	return = 0;
+}
+
+
+int IndiceLibretaUniversitaria(int LU)
+{
+	int low = 0;
+	int high = (sizeof(arrayNotas) - 1);
+
+	for (low=0;low<=high;low++)
+	{
+		if (LU == arrayNotas[low])
+		{
+			return low;
+		}
+	}
+	return -1;	
+}
+
+struct PaqueteMatero devolverNota()
+{
+
+	
+}
 
 
 

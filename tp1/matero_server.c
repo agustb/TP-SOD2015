@@ -4,7 +4,6 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include "resources.c"
-
 //--------------------
 #include <unistd.h>
 #include <errno.h>
@@ -60,82 +59,91 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	// -----------------------------------------------------------------------------------------------------
-
 	// SOCKET RETORNO --------------------------------------------------------------------------------------	
 
-	//socklen_t largo = sizeof(struct sockaddr_in);
-	
 	socklen_t long_cliente;	
 	struct sockaddr_in cliente;
 	int socket_retorno;	
 	
 	printf("Servidor a la espera de consultas. Escuchando en puerto %d\n", puerto);	
-	
-	long_cliente = sizeof(cliente);
-	//socket_retorno = accept(socket_servidor, (struct sockaddr *) &cliente, &largo);
-	socket_retorno = accept(socket_servidor, (struct sockaddr *) &cliente, &long_cliente);
-	if (socket_retorno == -1)
-	{
-		//close(socket_servidor);
-		printf ("No se puede abrir socket de cliente\n");
-		return -1;
-	}
-	
-	// LEE SOCKET CLIENTE ------------------------------------------------------------------------------------
-	int Leido = 0;
-	int Aux = 0;
-	int largo_cadena_lectura = sizeof(Cadena);
+	printf("Presione q para salir.\n");	
 
-	while (Leido < largo_cadena_lectura)
-	{
-		Aux = read (socket_retorno, Cadena + Leido, largo_cadena_lectura - Leido);
-		if (Aux > 0)
-		{
-			Leido = Leido + Aux;
-		}
-		else
-		{
-			if (Aux == 0) 
-				break;
-			if (Aux == -1)
-			{
-				switch (errno)
-				{
-					case EINTR:
-					case EAGAIN:
-						usleep (100);
-						break;
-					default:
-						return -1;
-				}
-			}
-		}
-	}
+	char q;	
+	// while( (q = getchar() ) != 'q')
+	// {
 	
-	printf ("Soy Servidor, he recibido : %s\n", Cadena);	
+		// ** LEE SOCKET CLIENTE ------------------------------------------------------------------------------------	
+		// 1. Crea el socket del cliente y queda esperando que se conecte.
+		long_cliente = sizeof(cliente);
+		socket_retorno = accept(socket_servidor, (struct sockaddr *) &cliente, &long_cliente);
+		if (socket_retorno == -1)
+		{
+			//close(socket_servidor);
+			printf ("No se puede abrir socket de cliente\n");
+			return -1;
+		}
+		
+		// 2. Una vez conectado el cliente, lee la cadena enviada e imprime resultado.
+		LeerSocket (socket_retorno, Cadena, sizeof(Cadena));
+		printf ("Soy Servidor, he recibido : %s\n", Cadena);
+		
+		close(socket_retorno);
+
+//	}
+		
+	// int Leido = 0;
+	// int Aux = 0;
+	// int largo_cadena_lectura = sizeof(Cadena);
+
+	// while (Leido < largo_cadena_lectura)
+	// {
+		// Aux = read (socket_retorno, Cadena + Leido, largo_cadena_lectura - Leido);
+		// if (Aux > 0)
+		// {
+			// Leido = Leido + Aux;
+		// }
+		// else
+		// {
+			// if (Aux == 0) 
+				// break;
+			// if (Aux == -1)
+			// {
+				// switch (errno)
+				// {
+					// case EINTR:
+					// case EAGAIN:
+						// usleep (100);
+						// break;
+					// default:
+						// return -1;
+				// }
+			// }
+		// }
+	// }
+
 	
-	// ESCRIBE SOCKET CLIENTE ---------------------------------------------------------------------------------
+	// ** ESCRIBE SOCKET CLIENTE ---------------------------------------------------------------------------------
 	strcpy (Cadena, "Adios");
-	int largo_cadena_escritura = sizeof(Cadena);
-	int Escrito = 0;
-	Aux = 0;
+	EscribirSocket (socket_retorno, Cadena, sizeof(Cadena));
+	// int largo_cadena_escritura = sizeof(Cadena);
+	// int Escrito = 0;
+	// Aux = 0;
 
-	while (Escrito < largo_cadena_escritura)
-	{
-		Aux = write (socket_retorno, Cadena + Escrito, largo_cadena_escritura - Escrito);
-		if (Aux > 0)
-		{
-			Escrito = Escrito + Aux;
-		}
-		else
-		{
-			if (Aux == 0)
-				break;
-			else
-				return -1;
-		}
-	}	
+	// while (Escrito < largo_cadena_escritura)
+	// {
+		// Aux = write (socket_retorno, Cadena + Escrito, largo_cadena_escritura - Escrito);
+		// if (Aux > 0)
+		// {
+			// Escrito = Escrito + Aux;
+		// }
+		// else
+		// {
+			// if (Aux == 0)
+				// break;
+			// else
+				// return -1;
+		// }
+	// }	
 	
 	
 	// FINALIZA ------------------------------------------------------------------------------------------------

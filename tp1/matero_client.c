@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 	
 	
 	// ESCRIBE SOCKET CLIENTE ----------------------------------------------------------------------------
-	strcpy (Cadena, "Hola");
+	strcpy (Cadena, "Hola, soy un cliente que necesita informacion");
 	int largo_cadena_escritura = sizeof(Cadena);
 	int Aux = 0;
 	int Escrito = 0;
