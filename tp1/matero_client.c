@@ -36,8 +36,7 @@ int main(int argc, char* argv[])
 	printf("	- Param 3: %s \n",argv[3]);
 	printf("	- Param 4: %s \n",argv[4]);
 	printf("	- Param 5: %s \n",argv[5]);
-	
-	
+		
 	// Chequea los parámetros de ingreso.
 	if (chequea_parametros_cliente(argc, argv, &ip_server, &modo, &puerto, &lu, &nota) < 0)
 	{
@@ -64,63 +63,33 @@ int main(int argc, char* argv[])
 		printf("No puedo establecer conexion con el servidor\n");
 		return -1;
 	}
-	
-	
+		
 	// ESCRIBE SOCKET CLIENTE ----------------------------------------------------------------------------
-	strcpy (Cadena, "Hola, soy un cliente que necesita informacion");
-	int largo_cadena_escritura = sizeof(Cadena);
-	int Aux = 0;
-	int Escrito = 0;
-
-	while (Escrito < largo_cadena_escritura)
-	{
-		Aux = write (socket_tcp, Cadena + Escrito, largo_cadena_escritura - Escrito);
-		if (Aux > 0)
-		{
-			Escrito = Escrito + Aux;
-		}
-		else
-		{
-			if (Aux == 0)
-				break;
-			else
-				return -1;
-		}
-	}	
+	struct PaqueteMatero paquete_matero;
+			
+	paquete_matero.modo = *modo;
+	paquete_matero.LU = lu;
+	paquete_matero.Nota = nota;
+	
+	EscribeMensaje (socket_tcp, idPaqueteMatero, (char *)&paquete_matero, sizeof(paquete_matero));
+	
 	
 	// LEE SOCKET CLIENTE -------------------------------------------------------------------------------
-	int Leido = 0;
-	Aux = 0;
-	int largo_cadena_lectura = sizeof(Cadena);
-
-	while (Leido < largo_cadena_lectura)
-	{
-		Aux = read (socket_tcp, Cadena + Leido, largo_cadena_lectura - Leido);
-		if (Aux > 0)
-		{
-			Leido = Leido + Aux;
-		}
-		else
-		{
-			if (Aux == 0) 
-				break;
-			if (Aux == -1)
-			{
-				switch (errno)
-				{
-					case EINTR:
-					case EAGAIN:
-						usleep (100);
-						break;
-					default:
-						return -1;
-				}
-			}
-		}
-	}
+	//LeerSocket (socket_tcp, Cadena, sizeof(Cadena));
+		
+	char *mensaje = NULL;
+	int identificador;
 	
-	printf ("Soy cliente, He recibido : %s\n", Cadena);
-
+	LeeMensaje (socket_tcp, &identificador, &mensaje);
+	
+	switch (identificador) 
+	{ 
+		case idCadena: 
+		{ 
+			printf ("Soy cliente, He recibido : %s\n", Cadena); 
+			break; 
+		} 
+	}
 
 	// FINALIZA -----------------------------------------------------------------------------------------	
 	close(socket_tcp);

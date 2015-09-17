@@ -170,28 +170,74 @@ int EscribirSocket (int fd, char *Datos, int Longitud)
 	return Escrito;
 }
 
+typedef struct Cabecera 
+{ 
+    int identificador;
+	int longitud;
+} Cabecera;
+
+typedef enum 
+{ 
+    idPaqueteMatero, 
+    idCadena 
+} Identificadores;
+
+void EscribeMensaje (int socket, int idMensaje, char *mensaje, int tamanio)
+{
+    /* Se declara y rellena la cabecera */ 
+    Cabecera cabecera; 
+    cabecera.identificador = idMensaje; 
+	cabecera.longitud = tamanio;
+
+    /* Se envía la cabecera */ 
+    write (socket, &cabecera, sizeof(cabecera)); 
+
+    /* Si el mensaje no tiene cuerpo, hemos terminado */ 
+    if ((mensaje == NULL) || (tamanio == 0)) 
+        return; 
+
+    /* Se envía el cuerpo */ 
+    write (socket, mensaje, tamanio);	
+}
+
+void LeeMensaje (int socket, int *idMensaje, char **mensaje)
+{
+	Cabecera cabecera; 
+	*mensaje = NULL;
+	
+    read (socket, &cabecera, sizeof(cabecera)); /* Se lee la cabecera */ 
+
+    /* Rellenamos el identificador para devolverlo */ 
+    *idMensaje = cabecera.identificador; 
+
+    /* Si hay que leer una estructura detrás */ 
+    if (cabecera.longitud > 0) 
+    { 
+        *mensaje = (char *)malloc (cabecera.longitud);  /* Se reserva espacio para leer el mensaje */ 
+        read (socket, *mensaje, cabecera.longitud); 
+    }
+}
+
 struct PaqueteMatero {
-    char *modo;
+    char* modo;
     int LU;
     int Nota;
 };
 
 struct PaqueteMatero arrayNotas[20];
 
-void IncializaArrayNotas()
+/*void IncializaArrayNotas()
 {
 	int low = 0;
 	int high = (sizeof(arrayNotas) - 1);
 	
 	for (low=0;low<=high;low++)
 	{
-		arrayNotas[low].modo = NULL;
+		arrayNotas[low].modo = "";
 		arrayNotas[low].LU = 0;
 		arrayNotas[low].Nota = 0;		
 	}	
-	return = 0;
 }
-
 
 int IndiceLibretaUniversitaria(int LU)
 {
@@ -200,7 +246,7 @@ int IndiceLibretaUniversitaria(int LU)
 
 	for (low=0;low<=high;low++)
 	{
-		if (LU == arrayNotas[low])
+		if (LU == arrayNotas[low].Nota)
 		{
 			return low;
 		}
@@ -208,13 +254,29 @@ int IndiceLibretaUniversitaria(int LU)
 	return -1;	
 }
 
-struct PaqueteMatero devolverNota()
+int BuscarNota(int indice)
 {
-
-	
+	return arrayNotas[indice].Nota;
 }
 
+int GrabarNota(int LU, int nota)
+{
+	int low = 0;
+	int high = (sizeof(arrayNotas) - 1);
 
+	for (low=0;low<=high;low++)
+	{
+		if (arrayNotas[low].LU == 0 && arrayNotas[low].Nota == 0)
+		{
+			arrayNotas[low].modo = 'P';
+			arrayNotas[low].LU = LU;
+			arrayNotas[low].Nota = nota;
+			return 0;
+		}
+	}
+	return -1;	
+}
+*/
 
 
 

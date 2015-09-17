@@ -83,68 +83,41 @@ int main(int argc, char* argv[])
 			return -1;
 		}
 		
-		// 2. Una vez conectado el cliente, lee la cadena enviada e imprime resultado.
-		LeerSocket (socket_retorno, Cadena, sizeof(Cadena));
-		printf ("Soy Servidor, he recibido : %s\n", Cadena);
+		// 2. Una vez conectado el cliente, lee la cadena enviada e imprime resultado.		
+		struct PaqueteMatero paquete_matero;
 		
+		char *mensaje = NULL;
+		int identificador;
+		
+		LeeMensaje (socket_retorno, &identificador, &mensaje);
+		
+		switch (identificador) 
+		{ 
+			case idPaqueteMatero: 
+			{ 
+				PaqueteMatero *paquete_matero = NULL; 
+				paquete_matero = (PaqueteMatero *)mensaje; 
+				printf ("Soy Servidor, he recibido modo: %s\n", mensaje.modo);		
+				printf ("Soy Servidor, he recibido LU: %s\n", mensaje.LU);
+				printf ("Soy Servidor, he recibido Nota: %s\n", mensaje.Nota);
+				break; 
+			} 
+		} 
+
 		close(socket_retorno);
+		
+		/* Se libera el mensaje  cuando ya no lo necesitamos */ 
+		if (mensaje != NULL) 
+		{ 
+			free (mensaje); 
+			mensaje = NULL; 
+		}		
 
 //	}
 		
-	// int Leido = 0;
-	// int Aux = 0;
-	// int largo_cadena_lectura = sizeof(Cadena);
-
-	// while (Leido < largo_cadena_lectura)
-	// {
-		// Aux = read (socket_retorno, Cadena + Leido, largo_cadena_lectura - Leido);
-		// if (Aux > 0)
-		// {
-			// Leido = Leido + Aux;
-		// }
-		// else
-		// {
-			// if (Aux == 0) 
-				// break;
-			// if (Aux == -1)
-			// {
-				// switch (errno)
-				// {
-					// case EINTR:
-					// case EAGAIN:
-						// usleep (100);
-						// break;
-					// default:
-						// return -1;
-				// }
-			// }
-		// }
-	// }
-
-	
 	// ** ESCRIBE SOCKET CLIENTE ---------------------------------------------------------------------------------
-	strcpy (Cadena, "Adios");
-	EscribirSocket (socket_retorno, Cadena, sizeof(Cadena));
-	// int largo_cadena_escritura = sizeof(Cadena);
-	// int Escrito = 0;
-	// Aux = 0;
-
-	// while (Escrito < largo_cadena_escritura)
-	// {
-		// Aux = write (socket_retorno, Cadena + Escrito, largo_cadena_escritura - Escrito);
-		// if (Aux > 0)
-		// {
-			// Escrito = Escrito + Aux;
-		// }
-		// else
-		// {
-			// if (Aux == 0)
-				// break;
-			// else
-				// return -1;
-		// }
-	// }	
-	
+	strcpy (Cadena, "Adios");	
+	EscribeMensaje (socket_retorno, idCadena, (char *)&Cadena, sizeof(Cadena));	
 	
 	// FINALIZA ------------------------------------------------------------------------------------------------
 	close(socket_retorno);
