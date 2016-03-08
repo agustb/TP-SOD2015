@@ -10,7 +10,7 @@
 #include <errno.h>
 //--------------------
 
-int main(int argc, char* argv[]) // borramos comentarios
+int main(int argc, char* argv[])
 {
 	char *modo = NULL;
 	char *ip_server;
