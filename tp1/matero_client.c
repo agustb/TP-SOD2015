@@ -10,7 +10,7 @@
 #include <errno.h>
 //--------------------
 
-int main(int argc, char* argv[]) // prueba de actualización remota en Github
+int main(int argc, char* argv[]) // borramos comentarios
 {
 	char *modo = NULL;
 	char *ip_server;
