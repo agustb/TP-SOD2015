@@ -10,7 +10,7 @@
 #include <errno.h>
 //--------------------
 
-int main(int argc, char* argv[]) // prueba para actualización de GIT
+int main(int argc, char* argv[]) // prueba de actualización remota en Github
 {
 	char *modo = NULL;
 	char *ip_server;
