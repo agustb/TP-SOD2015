@@ -9,10 +9,17 @@
 #include <errno.h>
 //--------------------
 
+void error(const char *msg) {
+    perror(msg);
+	exit(1); 
+}
+
 int main(int argc, char* argv[])
 {
-	int puerto = 3000;
-	char Cadena[100];	
+	// Variables
+	int n, socket_servidor, socket_retorno, puerto = 3000;
+	char lModo[1],lLu[4],lNota[1];
+	int long_Modo	
 
 	system("clear"); 
 		
@@ -29,7 +36,7 @@ int main(int argc, char* argv[])
 
 	// SOCKET SERVIDOR ------------------------------------------------------------------------------		
 	// Crea el socket del servidor.
-	int socket_servidor;
+	//int socket_servidor; -- declarado en seccion VARIABLES
 	socket_servidor = socket (AF_INET, SOCK_STREAM, 0);	
 	if (socket_servidor == -1)
 	{
@@ -63,10 +70,10 @@ int main(int argc, char* argv[])
 
 	socklen_t long_cliente;	
 	struct sockaddr_in cliente;
-	int socket_retorno;	
+	//int socket_retorno; -- declarado en seccion VARIABLES	
 	
 	printf("Servidor a la espera de consultas. Escuchando en puerto %d\n", puerto);	
-	printf("Presione q para salir.\n");	
+	//printf("Presione q para salir.\n");	
 
 	//char q;	
 	// while( (q = getchar() ) != 'q')
@@ -75,7 +82,8 @@ int main(int argc, char* argv[])
 		// ** LEE SOCKET CLIENTE ------------------------------------------------------------------------------------	
 		// 1. Crea el socket del cliente y queda esperando que se conecte.
 		long_cliente = sizeof(cliente);
-		socket_retorno = accept(socket_servidor, (struct sockaddr *) &cliente, &long_cliente);
+		// socket_retorno se crea cuando server acepta a cliente
+		socket_retorno = accept(socket_servidor, (struct sockaddr *) &cliente, &long_cliente); 
 		if (socket_retorno == -1)
 		{
 			//close(socket_servidor);
@@ -84,40 +92,20 @@ int main(int argc, char* argv[])
 		}
 		
 		// 2. Una vez conectado el cliente, lee la cadena enviada e imprime resultado.		
-		struct PaqueteMatero paquete_matero;
-		
-		char *mensaje = NULL;
-		int identificador;
-		
-		LeeMensaje (socket_retorno, &identificador, &mensaje);
-		
-		switch (identificador) 
-		{ 
-			case idPaqueteMatero: 
-			{ 
-				PaqueteMatero *paquete_matero = NULL; 
-				paquete_matero = (PaqueteMatero *)mensaje; 
-				printf ("Soy Servidor, he recibido modo: %s\n", mensaje.modo);		
-				printf ("Soy Servidor, he recibido LU: %s\n", mensaje.LU);
-				printf ("Soy Servidor, he recibido Nota: %s\n", mensaje.Nota);
-				break; 
-			} 
-		} 
+		n = read(socket_retorno,lModo,1);
+		if (n<0){
+			error("ERROR al leer el socket");
+		}
+		printf("Mensaje recibido: %s\n",lModo);
 
-		close(socket_retorno);
-		
-		/* Se libera el mensaje  cuando ya no lo necesitamos */ 
-		if (mensaje != NULL) 
-		{ 
-			free (mensaje); 
-			mensaje = NULL; 
-		}		
+		// Devuelvo mensaje al cliente
+		n = write(socket_retorno,"Tengo el mensaje",18);
+		if (n<0){
+			error("ERROR al escribir en el socket");
+		}
 
+		
 //	}
-		
-	// ** ESCRIBE SOCKET CLIENTE ---------------------------------------------------------------------------------
-	strcpy (Cadena, "Adios");	
-	EscribeMensaje (socket_retorno, idCadena, (char *)&Cadena, sizeof(Cadena));	
 	
 	// FINALIZA ------------------------------------------------------------------------------------------------
 	close(socket_retorno);
