@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 	printf("Servidor a la espera de consultas. Escuchando en puerto %d\n", puerto);	
 	printf("Presione q para salir.\n");	
 
-	char q;	
+	//char q;	
 	// while( (q = getchar() ) != 'q')
 	// {
 	

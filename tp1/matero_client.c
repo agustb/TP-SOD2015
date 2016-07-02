@@ -18,6 +18,12 @@ int main(int argc, char* argv[])
 	int lu = 123;
 	int nota = 9;
 	char Cadena[100];
+
+	struct PaqueteMatero {
+	    char* modo;
+	    int LU;
+	    int Nota;
+	};
 	
 	system("clear"); 
 	
@@ -66,11 +72,11 @@ int main(int argc, char* argv[])
 		
 	// ESCRIBE SOCKET CLIENTE ----------------------------------------------------------------------------
 	struct PaqueteMatero paquete_matero;
-			
+				
 	paquete_matero.modo = *modo;
 	paquete_matero.LU = lu;
 	paquete_matero.Nota = nota;
-	
+		
 	EscribeMensaje (socket_tcp, idPaqueteMatero, (char *)&paquete_matero, sizeof(paquete_matero));
 	
 	

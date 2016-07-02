@@ -10,7 +10,7 @@
 int chequea_parametros_cliente (int argc, char* argv[], char **ip, char **modo, int *puerto, int *lu, int *nota)
 {
 
-	if (argc < 4) // si no llegan parámetros produce error y muestra el siguiente mensaje.
+	if (argc < 4) // si no llegan parÃ¡metros produce error y muestra el siguiente mensaje.
 	{
 		printf ("Error en parametros de entrada para %s\n-> Cadena valida: [-p <port>] [-A|-P <Modo Alumno|Profesor>] [lu <Libreta Universitaria>] [nota (solo modo Profesor) <Calificacion>]\n", argv[0]);
 		return -1;
@@ -18,7 +18,7 @@ int chequea_parametros_cliente (int argc, char* argv[], char **ip, char **modo, 
 	
 	*ip= argv[1];	
 
-	// Controlo que el parámetro de Modo sea -A o -P. Sino muestra error.
+	// Controlo que el parÃ¡metro de Modo sea -A o -P. Sino muestra error.
 	*modo = argv[3];
 	if (strcmp(*modo, "-A") != 0 && strcmp(*modo, "-P") != 0)
     {
@@ -49,7 +49,7 @@ int chequea_parametros_cliente (int argc, char* argv[], char **ip, char **modo, 
 			   *lu = atoi(optarg);
 			   if (*lu < 0)
 			   {
-			   		printf ("El código de Libreta Universitaria no puede ser negativo.\n");
+			   		printf ("El cÃ³digo de Libreta Universitaria no puede ser negativo.\n");
 					return -1;
 			   }
 			   break;
@@ -68,19 +68,19 @@ int chequea_parametros_cliente (int argc, char* argv[], char **ip, char **modo, 
 
 			case 'A':
 			{
-				// Capturo el parámetro -A
+				// Capturo el parÃ¡metro -A
 				break;
 			}				
 			
 			case 'P':
 			{
-				// Capturo el parámetro -P
+				// Capturo el parÃ¡metro -P
 				break;
 			}				
 			
 			case '?':
 			{
-				// Capturo el parámetro -A|-P
+				// Capturo el parÃ¡metro -A|-P
 			}				
 		}
 	}
@@ -170,59 +170,24 @@ int EscribirSocket (int fd, char *Datos, int Longitud)
 	return Escrito;
 }
 
-typedef struct Cabecera 
-{ 
-    int identificador;
-	int longitud;
-} Cabecera;
+// typedef struct Cabecera 
+// { 
+//     int identificador;
+// 	int longitud;
+// } Cabecera;
 
-typedef enum 
-{ 
-    idPaqueteMatero, 
-    idCadena 
-} Identificadores;
+// typedef enum 
+// { 
+//     idPaqueteMatero, 
+//     idCadena 
+// } Identificadores;
 
-void EscribeMensaje (int socket, int idMensaje, char *mensaje, int tamanio)
-{
-    /* Se declara y rellena la cabecera */ 
-    Cabecera cabecera; 
-    cabecera.identificador = idMensaje; 
-	cabecera.longitud = tamanio;
 
-    /* Se envía la cabecera */ 
-    write (socket, &cabecera, sizeof(cabecera)); 
-
-    /* Si el mensaje no tiene cuerpo, hemos terminado */ 
-    if ((mensaje == NULL) || (tamanio == 0)) 
-        return; 
-
-    /* Se envía el cuerpo */ 
-    write (socket, mensaje, tamanio);	
-}
-
-void LeeMensaje (int socket, int *idMensaje, char **mensaje)
-{
-	Cabecera cabecera; 
-	*mensaje = NULL;
-	
-    read (socket, &cabecera, sizeof(cabecera)); /* Se lee la cabecera */ 
-
-    /* Rellenamos el identificador para devolverlo */ 
-    *idMensaje = cabecera.identificador; 
-
-    /* Si hay que leer una estructura detrás */ 
-    if (cabecera.longitud > 0) 
-    { 
-        *mensaje = (char *)malloc (cabecera.longitud);  /* Se reserva espacio para leer el mensaje */ 
-        read (socket, *mensaje, cabecera.longitud); 
-    }
-}
-
-struct PaqueteMatero {
-    char* modo;
-    int LU;
-    int Nota;
-};
+// struct PaqueteMatero {
+//     char* modo;
+//     int LU;
+//     int Nota;
+// };
 
 struct PaqueteMatero arrayNotas[20];
 
