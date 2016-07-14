@@ -10,20 +10,25 @@
 #include <errno.h>
 //--------------------
 
+void error(const char *msg) {
+    perror(msg);
+	exit(1); 
+}
+
 int main(int argc, char* argv[])
 {
+	// Variables
+	int n, socket_tcp;
+	char *lModo[2],lLu[4],lNota[1];
+	int long_Modo;
+	char buffer[256];	
+
 	char *modo = NULL;
 	char *ip_server;
 	int puerto = 3000;
 	int lu = 123;
 	int nota = 9;
 	char Cadena[100];
-
-	struct PaqueteMatero {
-	    char* modo;
-	    int LU;
-	    int Nota;
-	};
 	
 	system("clear"); 
 	
@@ -50,8 +55,6 @@ int main(int argc, char* argv[])
 	}
 
 	// Crear socket
-	int socket_tcp;
-	
 	struct sockaddr_in direccion;		
 	direccion.sin_family = AF_INET;
 	direccion.sin_addr.s_addr = inet_addr(ip_server); //inet_addr("192.168.1.103");	
@@ -70,32 +73,25 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 		
-	// ESCRIBE SOCKET CLIENTE ----------------------------------------------------------------------------
-	struct PaqueteMatero paquete_matero;
-				
-	paquete_matero.modo = *modo;
-	paquete_matero.LU = lu;
-	paquete_matero.Nota = nota;
-		
-	EscribeMensaje (socket_tcp, idPaqueteMatero, (char *)&paquete_matero, sizeof(paquete_matero));
-	
-	
-	// LEE SOCKET CLIENTE -------------------------------------------------------------------------------
-	//LeerSocket (socket_tcp, Cadena, sizeof(Cadena));
-		
-	char *mensaje = NULL;
-	int identificador;
-	
-	LeeMensaje (socket_tcp, &identificador, &mensaje);
-	
-	switch (identificador) 
-	{ 
-		case idCadena: 
-		{ 
-			printf ("Soy cliente, He recibido : %s\n", Cadena); 
-			break; 
-		} 
+	//----------------------------------------------------------------------------------
+
+	*lModo = "-A";
+
+	// Devuelvo mensaje al cliente
+
+	n = write(socket_tcp,&lModo,2);
+	if (n<0){
+		error("ERROR al escribir en el socket");
 	}
+
+	bzero(buffer,256);
+	n = read(socket_tcp,buffer,255);
+	if (n<0){
+		error("ERROR al leer el socket");
+	}
+	printf("Mensaje recibido desde servidor: %s\n",buffer);
+
+
 
 	// FINALIZA -----------------------------------------------------------------------------------------	
 	close(socket_tcp);

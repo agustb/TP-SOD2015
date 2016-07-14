@@ -109,42 +109,42 @@ int chequea_parametros_servidor(int argc, char* argv[], int *puerto)
     return 0;
 }
 
-int LeerSocket (int fd, char *Datos, int Longitud)
-{
-	int Leido = 0;
-	int Aux = 0;
+// int LeerSocket (int fd, char *Datos, int Longitud)
+// {
+// 	int Leido = 0;
+// 	int Aux = 0;
 
-	if ((fd == -1) || (Datos == NULL) || (Longitud < 1))
-		return -1;
-	while (Leido < Longitud)
-	{
-		Aux = read (fd, Datos + Leido, Longitud - Leido);
-		if (Aux > 0)
-		{
-			Leido = Leido + Aux;
-		}
-		else
-		{
-			if (Aux == 0) 
-				return Leido;
-			if (Aux == -1)
-			{
-				switch (errno)
-				{
-					case EINTR:
-					case EAGAIN:
-						usleep (100);
-						break;
-					default:
-						return -1;
-				}
-			}
-		}
-	}
-	return Leido;
-}
+// 	if ((fd == -1) || (Datos == NULL) || (Longitud < 1))
+// 		return -1;
+// 	while (Leido < Longitud)
+// 	{
+// 		Aux = read (fd, Datos + Leido, Longitud - Leido);
+// 		if (Aux > 0)
+// 		{
+// 			Leido = Leido + Aux;
+// 		}
+// 		else
+// 		{
+// 			if (Aux == 0) 
+// 				return Leido;
+// 			if (Aux == -1)
+// 			{
+// 				switch (errno)
+// 				{
+// 					case EINTR:
+// 					case EAGAIN:
+// 						usleep (100);
+// 						break;
+// 					default:
+// 						return -1;
+// 				}
+// 			}
+// 		}
+// 	}
+// 	return Leido;
+// }
 
-int EscribirSocket (int fd, char *Datos, int Longitud)
+/*int EscribirSocket (int fd, char *Datos, int Longitud)
 {
 	int Escrito = 0;
 	int Aux = 0;
@@ -168,7 +168,7 @@ int EscribirSocket (int fd, char *Datos, int Longitud)
 		}
 	}
 	return Escrito;
-}
+}*/
 
 // typedef struct Cabecera 
 // { 
@@ -189,7 +189,7 @@ int EscribirSocket (int fd, char *Datos, int Longitud)
 //     int Nota;
 // };
 
-struct PaqueteMatero arrayNotas[20];
+//struct PaqueteMatero arrayNotas[20];
 
 /*void IncializaArrayNotas()
 {

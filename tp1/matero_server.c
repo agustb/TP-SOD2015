@@ -18,8 +18,8 @@ int main(int argc, char* argv[])
 {
 	// Variables
 	int n, socket_servidor, socket_retorno, puerto = 3000;
-	char lModo[1],lLu[4],lNota[1];
-	int long_Modo	
+	char lModo[3],lLu[4],lNota[1];
+	int long_Modo;	
 
 	system("clear"); 
 		
@@ -75,37 +75,34 @@ int main(int argc, char* argv[])
 	printf("Servidor a la espera de consultas. Escuchando en puerto %d\n", puerto);	
 	//printf("Presione q para salir.\n");	
 
-	//char q;	
-	// while( (q = getchar() ) != 'q')
-	// {
+
+
+	// ** LEE SOCKET CLIENTE ------------------------------------------------------------------------------------	
+	// 1. Crea el socket del cliente y queda esperando que se conecte.
+	long_cliente = sizeof(cliente);
+	// socket_retorno se crea cuando server acepta a cliente
+	socket_retorno = accept(socket_servidor, (struct sockaddr *) &cliente, &long_cliente); 
+	if (socket_retorno == -1)
+	{
+		//close(socket_servidor);
+		printf ("No se puede abrir socket de cliente\n");
+		return -1;
+	}
 	
-		// ** LEE SOCKET CLIENTE ------------------------------------------------------------------------------------	
-		// 1. Crea el socket del cliente y queda esperando que se conecte.
-		long_cliente = sizeof(cliente);
-		// socket_retorno se crea cuando server acepta a cliente
-		socket_retorno = accept(socket_servidor, (struct sockaddr *) &cliente, &long_cliente); 
-		if (socket_retorno == -1)
-		{
-			//close(socket_servidor);
-			printf ("No se puede abrir socket de cliente\n");
-			return -1;
-		}
-		
-		// 2. Una vez conectado el cliente, lee la cadena enviada e imprime resultado.		
-		n = read(socket_retorno,lModo,1);
-		if (n<0){
-			error("ERROR al leer el socket");
-		}
-		printf("Mensaje recibido: %s\n",lModo);
+	// 2. Una vez conectado el cliente, lee la cadena enviada e imprime resultado.		
+	n = read(socket_retorno,lModo,3);
+	if (n<0){
+		error("ERROR al leer el socket");
+	}
+	printf("Mensaje recibido: %s\n",lModo);
 
-		// Devuelvo mensaje al cliente
-		n = write(socket_retorno,"Tengo el mensaje",18);
-		if (n<0){
-			error("ERROR al escribir en el socket");
-		}
+	// Devuelvo mensaje al cliente
+	n = write(socket_retorno,"Tengo el mensaje",18);
+	if (n<0){
+		error("ERROR al escribir en el socket");
+	}
 
 		
-//	}
 	
 	// FINALIZA ------------------------------------------------------------------------------------------------
 	close(socket_retorno);
