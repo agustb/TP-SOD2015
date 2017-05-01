@@ -89,7 +89,8 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 	
-	// 2. Una vez conectado el cliente, lee la cadena enviada e imprime resultado.		
+	// 2. Una vez conectado el cliente, lee la cadena enviada e imprime resultado.	
+	bzero(lModo,4)	
 	n = read(socket_retorno,lModo,3);
 	if (n<0){
 		error("ERROR al leer el socket");

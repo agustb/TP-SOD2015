@@ -75,11 +75,11 @@ int main(int argc, char* argv[])
 		
 	//----------------------------------------------------------------------------------
 
-	*lModo = "-A";
+	char lAux[2] = "-A";
 
 	// Devuelvo mensaje al cliente
 
-	n = write(socket_tcp,&lModo,2);
+	n = write(socket_tcp,"-A",2);
 	if (n<0){
 		error("ERROR al escribir en el socket");
 	}
