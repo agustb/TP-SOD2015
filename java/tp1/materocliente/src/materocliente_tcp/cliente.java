@@ -57,12 +57,17 @@ public class cliente {
 		try {
 			// Send user data to server		
 			salida.println(usuario);
-			salida.println(libreta);
-			salida.println(nota);
-				
 			//Receive server response
 			System.out.println("Respuesta servidor: "+ entrada.readLine());
-			 
+			
+			salida.println(libreta);
+			//Receive server response
+			System.out.println("Respuesta servidor: "+ entrada.readLine());
+			
+			salida.println(nota);
+			//Receive server response
+			System.out.println("Respuesta servidor: "+ entrada.readLine());	
+							 
 		} catch (IOException e) {
 			System.out.println("IOException: "+ e.getMessage());
 		}
