@@ -59,12 +59,15 @@ public class Server {
 			}
 			
 		} catch (IOException e) {
-			
+			 System.out.println("IOException: " + e.getMessage());	
 		}
+				
+		salida.close();
+	    entrada.close();
+	    socketCliente.close();
+	    socketServidor.close();
 		
-		
-		
-		//System.out.println("Escuchando en puerto: "+ Integer.toString(puerto));
+	    //System.out.println("Escuchando en puerto: "+ Integer.toString(puerto));
 		
 		
 
