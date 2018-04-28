@@ -33,7 +33,7 @@ public class Server {
 			System.out.println("No puede escuchar en el puerto: "+ puerto);
 			System.exit(-1);
 		}
-		
+				
 		Socket socketCliente = null;
 		BufferedReader entrada = null;
 		PrintWriter salida = null;
