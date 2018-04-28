@@ -67,13 +67,13 @@ public class Server {
 				nota = entrada.readLine();
 				System.out.println("Nota: "+ nota);
 				
-				System.out.println("Mensaje del cliente: "+ map.get(libreta));
+				//System.out.println("Mensaje del cliente: "+ map.get(libreta));
 				
-				/*if (usuario.equals(ALUMNO)) {		
+				if (usuario.equals(ALUMNO)) {		
 					salida.println(map.get(libreta));
 				} else {
 					salida.println(map.get(libreta));
-				}*/
+				}
 					
 					
 					
