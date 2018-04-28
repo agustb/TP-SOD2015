@@ -79,12 +79,12 @@ public class cliente {
 			//System.out.println("Respuesta del servidor: "+ linea);
 			
 			// RESPUESTA DEL SERVIDOR
-			/*linea = entrada.readLine();
+			linea = entrada.readLine();
 			if (usuario.equals(ALUMNO)) {
-				System.out.printf("La nota del alumno con LU %s es %s :"+ libreta, linea);
+				System.out.printf("La nota del alumno con LU %s es %s :", libreta, linea);
 			} else {
 				System.out.println("Respuesta del servidor: "+ linea);
-			}*/
+			}
 			
 			
 			
