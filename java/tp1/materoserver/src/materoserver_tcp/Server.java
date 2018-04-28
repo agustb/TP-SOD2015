@@ -37,28 +37,31 @@ public class Server {
 		Socket socketCliente = null;
 		BufferedReader entrada = null;
 		PrintWriter salida = null;
+
+		BufferedReader stdIn =
+				new BufferedReader(new InputStreamReader(System.in));
+		
+		Map<String, String> map = new HashMap<String, String>();	
+		map.put("100", "9");
+		map.put("200", "4");
+		map.put("300", "7");
+
+		String linea = null;
 		
 		System.out.println("Escuchando: "+ puerto);
 		try {
-			// Se bloquea hasta que recibe peticion del cliente
-			// abriendo un socket para el cliente
-			socketCliente = socketServidor.accept();
-			System.out.println("Conexion aceptada: "+ socketCliente);
-			
-			//Establece canal de entrada
-			entrada = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
-			
-			// Establece canal de salida
-			salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketCliente.getOutputStream())),true);
-			
-			Map<String, String> map = new HashMap<String, String>();	
-			map.put("100", "9");
-			map.put("200", "4");
-			map.put("300", "7");
-			
-			String linea = null;
-			
-			while (true) {				
+			while (true) {
+				// Se bloquea hasta que recibe peticion del cliente
+				// abriendo un socket para el cliente
+				socketCliente = socketServidor.accept();
+				System.out.println("Conexion aceptada: "+ socketCliente);
+				
+				//Establece canal de entrada
+				entrada = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
+				
+				// Establece canal de salida
+				salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketCliente.getOutputStream())),true);
+					
 				usuario = entrada.readLine();
 				System.out.println("Usuario: "+ usuario);
 				libreta = entrada.readLine();
@@ -79,7 +82,7 @@ public class Server {
 					}
 				}
 				
-				linea = entrada.readLine();
+				linea = stdIn.readLine();
 				if (linea.equals("exit")) {
 					break;
 				}

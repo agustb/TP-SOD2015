@@ -89,9 +89,6 @@ public class cliente {
 					System.out.printf("La nota del alumno LU %s se ha guardado con éxito!",libreta);
 				}
 			}
-			//termino
-			salida.println("exit");
-			
 			
 			/*while(true) {
 				// leo la entrada del usuario
