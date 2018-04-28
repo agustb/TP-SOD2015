@@ -58,37 +58,37 @@ public class cliente {
 		
 		String linea;
 		
-		//try {
+		try {
 			
 			// USUARIO
 			linea = usuario;
 			salida.println(linea);
-			//linea = entrada.readLine();
-			//System.out.println("Respuesta del servidor: "+ linea);
 			
 			//LU
 			linea = Integer.toString(libreta);
 			salida.println(linea);
-			//linea = entrada.readLine();
-			//System.out.println("Respuesta del servidor: "+ linea);
 			
 			//Nota
 			linea = Integer.toString(nota);
 			salida.println(linea);
-			//linea = entrada.readLine();
-			//System.out.println("Respuesta del servidor: "+ linea);
 			
 			// RESPUESTA DEL SERVIDOR
 			linea = entrada.readLine();
 			if (usuario.equals(ALUMNO)) {
-				System.out.printf("La nota del alumno con LU %s es %s :", libreta, linea);
+				/*ALUMNO*/
+				if (linea.equals("null")) {
+					System.out.printf("La libreta %s no corresponde a ningún alumno.\n",libreta);
+				} else {
+					System.out.printf("La nota del alumno con LU %s es %s\n", libreta, linea);
+				}
 			} else {
-				System.out.println("Respuesta del servidor: "+ linea);
+				/*PROFESOR*/
+				if (linea.equals("-1")) {
+					System.out.printf("Se produjo un error al intentar guardar la nota del alumno LU %s",libreta);
+				} else {
+					System.out.printf("La nota del alumno LU %s se ha guardado con éxito!",libreta);
+				}
 			}
-			
-			
-			
-			
 			//termino
 			salida.println("exit");
 			
@@ -127,9 +127,9 @@ public class cliente {
 			
 			//if (stdIn.readLine().equals("exit"));
 							 
-		/*} catch (IOException e) {
+		} catch (IOException e) {
 			System.out.println("IOException: "+ e.getMessage());
-		}*/
+		}
 		
 		// Free resources
 		salida.close();

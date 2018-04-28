@@ -58,8 +58,7 @@ public class Server {
 			
 			String linea = null;
 			
-			while (true) {
-				
+			while (true) {				
 				usuario = entrada.readLine();
 				System.out.println("Usuario: "+ usuario);
 				libreta = entrada.readLine();
@@ -67,33 +66,23 @@ public class Server {
 				nota = entrada.readLine();
 				System.out.println("Nota: "+ nota);
 				
-				//System.out.println("Mensaje del cliente: "+ map.get(libreta));
-				
 				if (usuario.equals(ALUMNO)) {		
+					/*ALUMNO*/
 					salida.println(map.get(libreta));
 				} else {
-					salida.println(map.get(libreta));
+					/*PROFESOR*/
+					try {
+						map.put(libreta, nota);
+						salida.println("0");
+					} catch (Exception e) {
+						salida.println("-1");
+					}
 				}
-					
-					
-					
-					
-				//System.out.println("Mensaje del cliente: "+ linea);
-				//salida.println(linea);
 				
 				linea = entrada.readLine();
 				if (linea.equals("exit")) {
 					break;
 				}
-				
-				// Imprimo lo que llega del servidor
-				//System.out.println("Mensaje cliente: "+ entrada.readLine());
-				
-				//salida.println(entrada.readLine());
-				
-				//if (entrada.readLine().equals("exit")) break;
-
-				
 			}
 			
 		} catch (IOException e) {
@@ -104,11 +93,5 @@ public class Server {
 	    entrada.close();
 	    socketCliente.close();
 	    socketServidor.close();
-		
-	    //System.out.println("Escuchando en puerto: "+ Integer.toString(puerto));
-		
-		
-
 	}
-
 }
