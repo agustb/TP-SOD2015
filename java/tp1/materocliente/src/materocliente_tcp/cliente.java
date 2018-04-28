@@ -53,24 +53,83 @@ public class cliente {
 			System.exit(-1);
 		}
 		
+		BufferedReader stdIn =
+				new BufferedReader(new InputStreamReader(System.in));
 		
-		try {
+		String linea;
+		
+		//try {
+			
+			// USUARIO
+			linea = usuario;
+			salida.println(linea);
+			//linea = entrada.readLine();
+			//System.out.println("Respuesta del servidor: "+ linea);
+			
+			//LU
+			linea = Integer.toString(libreta);
+			salida.println(linea);
+			//linea = entrada.readLine();
+			//System.out.println("Respuesta del servidor: "+ linea);
+			
+			//Nota
+			linea = Integer.toString(nota);
+			salida.println(linea);
+			//linea = entrada.readLine();
+			//System.out.println("Respuesta del servidor: "+ linea);
+			
+			// RESPUESTA DEL SERVIDOR
+			/*linea = entrada.readLine();
+			if (usuario.equals(ALUMNO)) {
+				System.out.printf("La nota del alumno con LU %s es %s :"+ libreta, linea);
+			} else {
+				System.out.println("Respuesta del servidor: "+ linea);
+			}*/
+			
+			
+			
+			
+			//termino
+			salida.println("exit");
+			
+			
+			/*while(true) {
+				// leo la entrada del usuario
+				linea = stdIn.readLine();
+				
+				// mando al server el mensaje que escribo
+				salida.println(linea);
+				
+				// leo la respuesta del servidor
+				linea = entrada.readLine();
+				
+				System.out.println("Respuesta del servidor: "+ linea);
+				
+				if (linea.equals("exit")) {
+					break;
+				}
+			}*/
+				
+			
 			// Send user data to server		
-			salida.println(usuario);
-			//Receive server response
-			System.out.println("Respuesta servidor: "+ entrada.readLine());
+			//salida.println(usuario);
 			
-			salida.println(libreta);
 			//Receive server response
-			System.out.println("Respuesta servidor: "+ entrada.readLine());
+			//System.out.println("Respuesta servidor: "+ entrada.readLine());
 			
-			salida.println(nota);
+			//salida.println(libreta);
 			//Receive server response
-			System.out.println("Respuesta servidor: "+ entrada.readLine());	
+			//System.out.println("Respuesta servidor: "+ entrada.readLine());
+			
+			//salida.println(nota);
+			//Receive server response
+			//System.out.println("Respuesta servidor: "+ entrada.readLine());	
+			
+			//if (stdIn.readLine().equals("exit"));
 							 
-		} catch (IOException e) {
+		/*} catch (IOException e) {
 			System.out.println("IOException: "+ e.getMessage());
-		}
+		}*/
 		
 		// Free resources
 		salida.close();

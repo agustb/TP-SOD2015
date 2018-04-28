@@ -2,8 +2,8 @@ package materoserver_tcp;
 
 import java.io.*;
 import java.net.*;
-
-import javax.sound.midi.Soundbank;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Server {
 
@@ -11,8 +11,8 @@ public class Server {
 	static final String PROFESOR = "P"; 
 	
 	public static void main(String[] args)  throws IOException {
-		int puerto = 0, libreta = 0, nota = 0;
-		String usuario = null;	
+		int puerto = 0;
+		String usuario = null, libreta = null, nota = null;	
 		
 		/////////////////////////
 		// Parsing parameters
@@ -51,11 +51,49 @@ public class Server {
 			// Establece canal de salida
 			salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketCliente.getOutputStream())),true);
 			
+			Map<String, String> map = new HashMap<String, String>();	
+			map.put("100", "9");
+			map.put("200", "4");
+			map.put("300", "7");
+			
+			String linea = null;
+			
 			while (true) {
+				
+				usuario = entrada.readLine();
+				System.out.println("Usuario: "+ usuario);
+				libreta = entrada.readLine();
+				System.out.println("Libreta: "+ libreta);
+				nota = entrada.readLine();
+				System.out.println("Nota: "+ nota);
+				
+				System.out.println("Mensaje del cliente: "+ map.get(libreta));
+				
+				/*if (usuario.equals(ALUMNO)) {		
+					salida.println(map.get(libreta));
+				} else {
+					salida.println(map.get(libreta));
+				}*/
+					
+					
+					
+					
+				//System.out.println("Mensaje del cliente: "+ linea);
+				//salida.println(linea);
+				
+				linea = entrada.readLine();
+				if (linea.equals("exit")) {
+					break;
+				}
+				
 				// Imprimo lo que llega del servidor
-				System.out.println("Mensaje cliente: "+ entrada.readLine());
+				//System.out.println("Mensaje cliente: "+ entrada.readLine());
+				
+				//salida.println(entrada.readLine());
+				
+				//if (entrada.readLine().equals("exit")) break;
 
-				//
+				
 			}
 			
 		} catch (IOException e) {
