@@ -43,8 +43,6 @@ public class cliente {
 		/////////////////////////
 				
 		try {
-	         //XmlRpcClient server = new XmlRpcClient("http://127,0,0,1/minimatero"); 
-
 	        XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 	        config.setServerURL(new URL("http://127.0.0.1/minimatero"));
 

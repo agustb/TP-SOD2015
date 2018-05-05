@@ -55,7 +55,7 @@ public class server {
 	        server.start();
 	        
 	        System.out.println("Conexión exitosa!");
-	        System.out.println("Escuchando peticiones (terminar programa para detener)");
+	        System.out.println("Escuchando peticiones...");
 						
 		} catch (IOException e) {
 			 System.out.println("IOException: " + e.getMessage());	
