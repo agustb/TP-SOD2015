@@ -174,6 +174,12 @@ public class cliente implements BasicMessageListener {
 			e.printStackTrace();
 		}		
 		
+		// Recibo mensaje de servidor
+		RecepcionMensajes recepcion = new RecepcionMensajes(usuario,libreta);
+		recepcion.setConnection(conexionSpread);
+		
+		
+		
 		// Cierro conexión SPREAD
 		CerrarConexionSpread();
 	}
