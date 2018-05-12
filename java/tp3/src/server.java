@@ -197,7 +197,7 @@ public class server extends ServerProcess implements BasicMessageListener {
 				
 				switch (letra){
 				
-				
+				 
 					case 'J':
 			
 						// Monta a mensagem de resposta
