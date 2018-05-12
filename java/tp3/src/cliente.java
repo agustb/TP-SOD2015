@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.*;
 import spread.*;
 
-public class cliente {
+public class cliente implements BasicMessageListener {
 
 	static final String ALUMNO = "A";
 	static final String PROFESOR = "P";
@@ -11,9 +11,12 @@ public class cliente {
 	static final String GRUPO_SERVIDOR = "GRUPO_SERVIDOR";
 	private static SpreadConnection conexionSpread;
 	private static String userName;
-    boolean espera;	
+	private static int libreta = 0;
+	private static String usuario = null;	
 	
-	
+	///////////////////////////////////
+    /// CONEXION SPREAD
+    ///////////////////////////////////
 	private static void ConexionSpread(String nombreCliente, String ip, int puerto) {
 	
 		try
@@ -43,6 +46,9 @@ public class cliente {
 		
 	}	
 	
+	///////////////////////////////////
+    /// CERRAR CONEXION SPREAD
+    ///////////////////////////////////
 	private static void CerrarConexionSpread() {
         
 		try {
@@ -51,12 +57,51 @@ public class cliente {
 			e.printStackTrace();
 		}
 
-	}	
+	}
+
+	///////////////////////////////////
+    /// Override MESSAGERECEIVED
+    ///////////////////////////////////
+	@Override
+	public void messageReceived(SpreadMessage msg) {
+		try{
+			if (msg.isRegular()){
+				byte data[] = msg.getData();
+				String linea = new String(data);	
+			
+				// RESPUESTA DEL SERVIDOR
+				if (usuario.equals(ALUMNO)) {
+					/*ALUMNO*/
+					if (linea.equals("null")) {
+						System.out.printf("La libreta %s no corresponde a ningún alumno.\n",libreta);
+					} else {
+						System.out.printf("La nota del alumno con LU %s es %s\n", libreta, linea);
+					}
+				} else {
+					/*PROFESOR*/
+					if (linea.equals("-1")) {
+						System.out.printf("Se produjo un error al intentar guardar la nota del alumno LU %s",libreta);
+					} else {
+						System.out.printf("La nota del alumno LU %s se ha guardado con éxito!",libreta);
+					}
+				}				
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		
+	}
 	
+	///////////////////////////////////
+    /// MAIN
+    ///////////////////////////////////	
 	public static void main(String[] args) throws IOException {
 
-		int puerto = 0, libreta = 0, nota = 0;
-		String usuario = null;	
+		int puerto = 0, nota = 0;	
 		String nombreCliente = "mm_cliente";
 		String ip = "127.0.0.1";
 		
@@ -127,57 +172,10 @@ public class cliente {
 			conexionSpread.multicast(msgNota);
 		} catch (SpreadException e) {
 			e.printStackTrace();
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		}		
 		
 		// Cierro conexión SPREAD
 		CerrarConexionSpread();
-		
-		
-		try {
-	        XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-	        config.setServerURL(new URL("http://127.0.0.1/minimatero"));
-
-	        // create the client and configure it with instantiated configuration
-	        XmlRpcClient server = new XmlRpcClient();
-	        server.setConfig(config);
-			
-	         // Cargo parámetros para pasar a server
-	         Vector params = new Vector();
-	         params.addElement(libreta);
-	         params.addElement(nota);
-	         params.addElement(usuario);
-	         
-			 if (usuario.equals(ALUMNO)) {
-		 		/*ALUMNO*/
-		         Object result = server.execute("matero.get", params);
-	 			if (result.equals("null")) {
- 					System.out.printf("La libreta %s no corresponde a ningún alumno.\n",libreta); 
-				} else {
-					System.out.printf("La nota del alumno con LU %s es %s\n", libreta, result);
-				}
-			 } else {
-				/*PROFESOR*/
-				Object result = server.execute("matero.add", params);
-				if (result.equals("-1")) {
-					System.out.printf("Se produjo un error al intentar guardar la nota del alumno LU %s",libreta);
-				} else {
-					System.out.printf("La nota del alumno LU %s se ha guardado con éxito!",libreta);
-				}
-			 } 
-
-	      } catch (Exception e) {
-	    	  	System.out.println("IOException: "+ e.getMessage());
-	      }
-
 	}
 
 }
