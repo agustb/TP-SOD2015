@@ -61,9 +61,9 @@ public class RecepcionMensajes implements Runnable, BasicMessageListener{
 	public void run() {
         SpreadMessage msgreceived = new SpreadMessage();
         
-        boolean aguardando = true;
+        boolean esperando = true;
         
-        while(aguardando){
+        while(esperando){
         	try{
         		msgreceived = conexionSpread.receive();
         		messageReceived(msgreceived);

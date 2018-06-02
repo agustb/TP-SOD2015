@@ -12,8 +12,8 @@ public class cliente implements BasicMessageListener {
 	private static SpreadConnection conexionSpread;
 	private static String userName;
 	private static int libreta = 0;
-	private static String usuario = null;	
-	
+	private static String usuario = null;
+		
 	///////////////////////////////////
     /// CONEXION SPREAD
     ///////////////////////////////////
