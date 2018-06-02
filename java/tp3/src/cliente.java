@@ -178,8 +178,6 @@ public class cliente implements BasicMessageListener {
 		RecepcionMensajes recepcion = new RecepcionMensajes(usuario,libreta);
 		recepcion.setConnection(conexionSpread);
 		
-		
-		
 		// Cierro conexión SPREAD
 		CerrarConexionSpread();
 	}

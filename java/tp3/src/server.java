@@ -12,7 +12,7 @@ import spread.*;
 
 
 
-public class server extends ServerProcess implements BasicMessageListener {
+public class server implements BasicMessageListener {
 
 	static final String ALUMNO = "A";
 	static final String PROFESOR = "P"; 
@@ -114,7 +114,7 @@ public class server extends ServerProcess implements BasicMessageListener {
 				} else {
 					/*PROFESOR*/
 					try {
-						map.put(libreta, nota);
+						map.put(Integer.toString(libreta), Integer.toString(nota));
 						respuesta = "0";
 					} catch (Exception e) {
 						respuesta = "-1";
@@ -219,7 +219,9 @@ public class server extends ServerProcess implements BasicMessageListener {
 		String nombreServidor = "mm_servidor";
 		String ip = "127.0.0.1";
 		new server(nombreServidor, ip, puerto);
-
+		
+		// Cierro conexión SPREAD
+		CerrarConexionSpread();
 	}
 	
 }
