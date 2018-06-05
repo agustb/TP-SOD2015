@@ -46,7 +46,7 @@ public class cliente {
 		PrintWriter salida = null;
 		
 		// Create socket		
-		try {
+		try { 
 			socketCliente = new Socket("localhost",puerto);
 			entrada = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
 			salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketCliente.getOutputStream())),true);
