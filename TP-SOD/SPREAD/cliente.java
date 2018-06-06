@@ -30,9 +30,6 @@ public class cliente implements BasicMessageListener {
 			spreadGroup.join(conexionSpread, GRUPO_CLIENTE);
 			System.out.println("Uniendo a " + spreadGroup + ".");			
 			System.out.println("Se ha establecido la conexión " + nombreCliente + " con " + ip + ":" + puerto);
-			
-			int cantServer = 0;
-			cantServer = 
 
 		}
 		catch(SpreadException e)

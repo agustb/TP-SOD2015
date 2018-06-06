@@ -1,7 +1,15 @@
 package mod;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import spread.*;
@@ -10,6 +18,42 @@ public class Server {
 
 	static final String ALUMNO = "A";
 	static final String PROFESOR = "P"; 
+	static final String GRUPO_SERVIDOR = "GRUPO_SERVIDOR";
+	private static SpreadConnection conexionSpread;
+	private static boolean esPrimario;
+	
+	///////////////////////////////////
+    /// CERRAR CONEXION SPREAD
+    ///////////////////////////////////
+	private static void CerrarConexionSpread() {
+        
+		try {
+			conexionSpread.disconnect();
+		} catch (SpreadException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	private static void evaluarMensaje(SpreadMessage msg) {
+		try {
+			if (msg.isRegular()) {
+				// escritura?
+			} 
+			else if (msg.isMembership()) {
+				MembershipInfo info = msg.getMembershipInfo();
+				if (info.isCausedByDisconnect()) {
+					esPrimario = true;
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+	}
 	
 	public static void main(String[] args)  throws IOException {
 		int puerto = 0;
@@ -34,7 +78,85 @@ public class Server {
 			System.out.println("No puede escuchar en el puerto: "+ puerto);
 			System.exit(-1);
 		}
-				
+		
+		// Inicializa y hace JOIN de SPREAD
+		SpreadMessage msg;
+		SpreadMessage msgreceived = new SpreadMessage();
+		
+		String nombreServidor = "mm_servidor";
+		String ip = "192.168.1.100";
+		try
+		{
+			// Conecto
+			conexionSpread = new SpreadConnection();
+			conexionSpread.connect(InetAddress.getByName(ip), puerto, nombreServidor, false, true);
+			
+			// JOIN a grupo
+			SpreadGroup grupoSpread = new SpreadGroup();
+			grupoSpread.join(conexionSpread, GRUPO_SERVIDOR);
+
+		}
+		catch(SpreadException e)
+		{
+			System.err.println("Ha ocurrido un error al conectar a Daemon");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		catch(UnknownHostException e)
+		{
+			System.err.println("El Daemon de Spread no fue encontrado." + ip);
+			System.exit(1);
+		}
+		
+		// Defino PRIMARY/BACKUP
+		int cantServer = 1; // falta resolver
+		esPrimario = (cantServer == 1);
+		
+		// Si es BACKUP
+		if (!esPrimario) {
+			while (true) {
+				try{
+					msgreceived = conexionSpread.receive();
+					try {
+						if (msg.isRegular()) {
+							// escritura?
+						} 
+						else if (msg.isMembership()) {
+							MembershipInfo info = msg.getMembershipInfo();
+							if (info.isCausedByDisconnect()) {
+								esPrimario = true;
+								break;
+							}
+						}
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+						System.exit(1);
+					}
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+					System.exit(1);
+				}				
+			}
+		}
+		
+		// Si es PRIMARIO
+		do {
+			try {
+				msgreceived = conexionSpread.receive();
+				cantServer = msgreceived.getGroups().length; 
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				System.exit(1);
+			}			
+		} while (cantServer > 1);				
+		
+		////////////////////////////////////////////////
 		Socket socketCliente = null;
 		BufferedReader entrada = null;
 		PrintWriter salida = null;
@@ -97,5 +219,6 @@ public class Server {
 	    entrada.close();
 	    socketCliente.close();
 	    socketServidor.close();
+	    CerrarConexionSpread();
 	}
 }
